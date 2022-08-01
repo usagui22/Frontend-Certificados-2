@@ -12,7 +12,9 @@ const Logo=()=>{
                     className="bg-light d-inline h-50"
                     src={imagen}
                 />                
-                <Link className='nav-brand text text-white' to="/">Certificados En Linea</Link>                                
+                <Link className='nav-brand text text-white' 
+                to="/"
+                >Certificados En Linea</Link>                                
             </Figure>            
         </Container>
       )
@@ -29,7 +31,7 @@ const Logo=()=>{
                 </div>
 
                 <Nav className='nav-link ' variant="dark">                    
-                    <Link className="nav-link text text-white" to="/Ingresar">Ingresar</Link>                    
+                    <Link className="nav-link text text-white" to="/IngresarUsuario">Ingresar</Link>                    
                 </Nav>
 
             </Container>

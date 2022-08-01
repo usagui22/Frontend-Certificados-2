@@ -1,10 +1,13 @@
 import { Formik, Form} from "formik";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import FieldContent from "../../Components/FieldContent";
 import * as Yup from 'yup';
+import { API } from "../../Services/Conexion";
 
 const FormCrearEvento =()=>{   
+    const [enviado,setMostrarEnviado]=useState(false);        
+
     return(
         <>
          <div className='form-title'>                
@@ -40,11 +43,25 @@ const FormCrearEvento =()=>{
                     fin_actividades: Yup.date("Ingrese una fecha valida").required("El campo no puede quedar vacio"),
                     inicio_emision:Yup.date("Ingrese una fecha valida").required("El campo no puede quedar vacio"),
                     fecha_fin: Yup.date("ingrese una fecha valida").required("EL campo no puede quedar vacio"),
-                })
+                })                
             }
-            onSubmit={(values) => {
-                console.log("El formulario esta enviando?")
-                   console.log(values)
+            onSubmit={(values,{resetForm}) => {                                
+                console.log(values)                
+                const ruta="evento/crear-evento"
+                try {                                        
+                    API.post(ruta,values).then(
+                    console.log("El formulario ha sido enviado"))                                        
+                    resetForm();                    
+                    //setMostrarCrear(true);
+                    //mostrarMensaje("valido");
+                    setMostrarEnviado(true)                
+                } catch (error) {
+                    console.log("No se puede enviar la informacion")
+                    //setMostrarCrear(false);
+                    //mostrarMensaje("No Valido");
+                    
+                    console.log("error al mostrar modal");
+                }
               }}
         >               
             <Form className="formulario">
@@ -93,7 +110,9 @@ const FormCrearEvento =()=>{
                 type="date" 
                 name="fecha_fin" 
                 />
-                <Button  className="btn-crear " type="submit">Aceptar</Button>
+                <Button              
+                className="btn-crear " type="submit">Aceptar</Button>
+                {enviado && <p className="is-valid">EL FORMULARIO SE HA ENVIADO CON EXITO</p>}           
             </Form>
         </Formik>
         
