@@ -53,12 +53,12 @@ import { API } from "../../Services/Conexion";
               <td>{pla.plantilla}</td>
               <td>
                 <BotonEditar
-                  direccionEditar="/FormFile"
+                  direccionEditar={"/EditarPlantilla/:id"+pla.id}
                 />
               </td>
               <td>
                 <BotonEliminar
-                direccionEliminar="/EliminarFile"
+                direccionEliminar={"/EliminarPlantilla/:id"+pla.id}
                 />
               </td>              
             </tr>)

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, ButtonGroup, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { BotonEditar, BotonEliminar } from "../../componentes/Botones";
-import { API } from "../../conexiones/Conexion";
+import { API } from "../../Services/Conexion";
 
 export const ListaDocumento =()=>{
 const [certificado,setCertificado]=useState([]);
@@ -87,3 +87,7 @@ const [certificado,setCertificado]=useState([]);
         </>
     );
 }
+const ListaDocumentoAprobados=()=>{
+
+}
+export {ListaDocumento, ListaDocumentoAprobados};

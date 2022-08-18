@@ -33,7 +33,7 @@ const ListaUnidad = () =>{
       <Table responsive  className='table table-bordered'>
         <thead>
           <tr>
-            
+                        
             <th>Nombre</th>
             <th>Abreviatura</th>
             <th>Telefono</th>
@@ -58,15 +58,15 @@ const ListaUnidad = () =>{
               <td>{uni.direccion}</td>              
               <td>{uni.responsable}</td>
               <td>
-                <BotonEditar direccionEditar={"/editarUnidad"}/>
+                <BotonEditar direccionEditar={"/editarUnidad/:id"+uni.id}/>
                                 
               </td>              
               <td>
-                <BotonEliminar direccionEliminar={"/eliminarUnidad"}/>
+                <BotonEliminar direccionEliminar={"/eliminarUnidad"+uni.id}/>
                 
               </td> 
               <td>
-                <BotonAsignar direccionAsignar={"/ListaCheck/"} identificador={uni.id}/>
+                <BotonAsignar direccionAsignar={"/ListaUsuario/"} identificador={uni.id}/>
                 
               </td>  
             </tr>

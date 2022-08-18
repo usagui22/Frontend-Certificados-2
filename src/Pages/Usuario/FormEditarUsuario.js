@@ -2,16 +2,20 @@ import { Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import FieldContent from "../../Components/FieldContent";
+import * as Yup from 'yup';
+import { API } from "../../Services/Conexion";
 
 const FormEditarUsuario=()=>{
 const[seleccionado, setSeleccionado]=useState([]);
+const[mensajeEnviado,setMsj]=useState(false)
 
-const cargarUsuario=()=>{
-    
+const cargarUsuario=async()=>{
+    let ruta="usuario/get-usuario"
     try {
-        
+        const res= await API.get(ruta)
+        setSeleccionado(res.data)
     } catch (error) {
-        
+        console.log("El usuario seleccionado no existe")
     }
 }
 useEffect(()=>{
@@ -20,19 +24,19 @@ useEffect(()=>{
     return(
         <>
         <div>
-            <h3>Nuevo Usuario</h3>
+            <h3>Editar Usuario {seleccionado.id_usuario}</h3>
         </div>
         <Formik
             initialValues={{
-                nombres:'',
-                apellido_paterno:'',
-                apellido_materno:'',
-                correo:'',
-                celular:'',
-                password:'',
-                ci:'',
-                cargo:'',
-                cod_sis:''
+                nombres:seleccionado.nombres,
+                apellido_paterno:seleccionado.apellido_paterno,
+                apellido_materno:seleccionado.apellido_materno,
+                correo:seleccionado.correo,
+                celular:seleccionado.celular,
+                password:seleccionado.password,
+                ci:seleccionado.ci,
+                cargo:seleccionado.cargo,
+                cod_sis:seleccionado.cod_sis
             }}
             validationSchema={                
                 Yup.object({
@@ -60,9 +64,20 @@ useEffect(()=>{
                     .matches(/^[0-9A-Z]{7}$/,"El campo contiene 9 numeros")
                 })
             }
-            onSubmit={(values)=>{
-                console.log("El formulario se ha enviado");
-            }}
+
+            onSubmit={(values,{resetForm}) => {                                
+                console.log(values)                
+                const ruta="usuario/editar-usuario"
+                try {                                        
+                    API.post(ruta,values).then(
+                    console.log("El formulario ha sido actualizado"))                                        
+                    resetForm();                                        
+                    setMsj(true)               
+                } catch (error) {
+                    console.log("No se puede enviar la informacion")
+                    
+                }
+              }}
         >
             <Form className="formulario">
             <FieldContent 
@@ -106,10 +121,12 @@ useEffect(()=>{
                 name="ci" 
                 />
             <Button className="btn-crear" type="submit">
-                Crear
+                Editar
             </Button>
+            {mensajeEnviado && <p className="is-valid">EL FORMULARIO HA SIDO ENVIADO CON EXITO!!</p>}
             </Form>
         </Formik>
         </>
     );
 }
+export default FormEditarUsuario;

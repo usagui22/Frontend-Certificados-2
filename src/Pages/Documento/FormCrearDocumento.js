@@ -1,8 +1,8 @@
-import { Form, Formik } from "formik";
+import { Form, Formik, yupToFormErrors } from "formik";
 import React, { useEffect, useState } from "react";
 import FieldContent from "../../Components/FieldContent";
 import FieldSelect from "../../Components/FieldSelect";
-
+import * as Yup from 'yup';
 import { API } from "../../Services/Conexion";
 
 const FormCrearDocumento=()=>{
@@ -33,7 +33,16 @@ useEffect(()=>{
                 confirmacion:'',
                 path:'',
             }}
-            
+            validationSchema={
+                Yup.object({
+                    nombre:Yup.string()
+                    .required("El campo no puede quedar en vacio")
+                    .matches(/^\w+[a-zA-ZÀ-ÿ\s]+$/,"El campo solo contiene caracteres alfabeticos"),
+                    hash:Yup.string()
+                    //.required("El campo no puede quedar en vacio")
+                    .matches()
+                })
+            }
         >
             <Form>
             <FieldSelect
