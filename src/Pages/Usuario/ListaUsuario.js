@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Table } from "react-bootstrap";
+import { ButtonGroup, Table } from "react-bootstrap";
 import { BotonCargar, BotonCrear,BotonEditar, BotonEliminar } from "../../Components/Botones";
 import { API } from "../../Services/Conexion";
 
 export const ListaUsuario = () => {
   const [usuario, setUsuario] = useState([])
 
-  const cargarUsuarios = async () =>{
+  const getUsuarios = async () =>{
     let path="usuario/listar-usuario";
     try {
       const res = await API.get(path)
@@ -16,8 +16,20 @@ export const ListaUsuario = () => {
     }
   }
 
+  const handleDelete=(id)=>{
+    const p="usuario/eliminar-usuario";
+    try {
+      API.delete(p+"$id_usu"+id)
+    .then(
+      getUsuarios()
+    );
+    } catch (error) {
+      console.log("Error al eliminar elemento");
+    }    
+  }
+
   useEffect(() => {
-    cargarUsuarios();
+    getUsuarios();
   }, [])
 
   return(
@@ -28,8 +40,10 @@ export const ListaUsuario = () => {
         <h3>LISTA DE USUARIOS</h3>      
       </div>              
       <div >
+        <ButtonGroup className="p-3">
         <BotonCrear direccionFormulario="/CrearUsuario" etiqueta="Crear Usuario"/>
         <BotonCargar direccionFormularioArchivo="/CargarArchivo" etiqueta="Seleccionar Archivo"/>
+        </ButtonGroup>
       </div>    
       <div className='table-responsive'>
       <Table responsive  className='table table-bordered'>
@@ -59,8 +73,10 @@ export const ListaUsuario = () => {
                 
               </td>                           
               <td>
-                <BotonEliminar direccionEliminar={"/eliminarUsuario"}/>  
-              
+                <BotonEliminar funcion={()=>handleDelete(usu.id)}/>  
+                {/* <Button className="btn-danger" 
+                  onClick={()=>handleDelete(usu.id)}>
+                    Eliminar</Button> */}
               </td>              
             </tr>)
           })}

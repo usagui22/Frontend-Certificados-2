@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Table, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { BotonEditar, BotonEliminar } from "../../Components/Botones";
+import { BotonEliminar } from "../../Components/Botones";
 import { API } from "../../Services/Conexion";
 
  const ListaPlantilla =()=>{
   const [plantilla,setPlantillas]=useState([]);
 
-  const cargarPlantillas= async ()=>{
+  const getPlantillas= async ()=>{
     let path="plantilla/listar-plantillas";
     try {
       const res = await API.get(path);
@@ -16,11 +16,29 @@ import { API } from "../../Services/Conexion";
       console.log("Error al cargar las plantillas o tabla vacia");
     }
   }
+  const handleDelete=(id)=>{    
+    const p="plantilla/eliminar-plantilla";
+    try {
+      API.delete(p+"$id_usu"+id)
+    .then(
+      getPlantillas()
+    )
+    } catch (error) {
+      console.log("Error al eliminar elemento");
+    }    
+  }
+
+  const setToLocalStorage=(id, nombre,descripcion,plantilla)=>{
+    localStorage.setItem("id",id);
+    localStorage.setItem("nombre",nombre);
+    localStorage.setItem("descripcion",descripcion);
+    localStorage.setItem("plantilla",plantilla);
+  }
 
   useEffect(()=>{
-    cargarPlantillas();
+    getPlantillas();
   },[])
-
+  
     return(              
         <>
       <div className='titulo'>
@@ -52,13 +70,26 @@ import { API } from "../../Services/Conexion";
               <td>{pla.descripcion}</td>
               <td>{pla.plantilla}</td>
               <td>
-                <BotonEditar
+                {/* <BotonEditar
                   direccionEditar={"/EditarPlantilla/:id"+pla.id}
-                />
-              </td>
+                /> */}
+                <Link to={"/EditarPlantilla"} >
+                  <Button
+                    onClick={()=>setToLocalStorage(                      
+                      pla.id,
+                      pla.nombre,
+                      pla.descripcion,
+                      pla.plantilla
+                    )}
+                  >
+                    Actualizar
+                  </Button>
+                </Link>
+              </td>            
               <td>
                 <BotonEliminar
-                direccionEliminar={"/EliminarPlantilla/:id"+pla.id}
+                //direccionEliminar={"/EliminarPlantilla/:id"+pla.id}
+                funcion={()=>handleDelete(pla.id)}
                 />
               </td>              
             </tr>)

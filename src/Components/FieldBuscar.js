@@ -1,30 +1,25 @@
 import React from "react";
-import { FormControl, FormLabel } from "react-bootstrap";
+import { FormControl, FormLabel, Stack } from "react-bootstrap";
 import { BotonBuscar } from "./Botones";
 
 const FieldBuscar=(props)=>{
-    const {titulo, change,placeholder,valor}=props;
-    
-    // const [contenido,setContenido]=useState(null);
-    // const [comparar, setComparar]=[{id_usuario:null}];
-    
-    // const handleChange=(e)=>{
-    //     setContenido(e.target.value);    
-    //     setComparar({...comparar, id_usuario:e.target.value});    
-    //     funcion(e.target.value);        
-    // }    
+    const {titulo, change,placeholder,valor}=props;          
 
     return(
-        <div>
+        <div className="me-auto">
         <FormLabel>{titulo}</FormLabel>
-        <div className="row">        
+        {/* <div className="row ">        */}
+        <Stack  direction="horizontal">
         <FormControl 
             className="col" 
+            type="text"            
             value={valor} 
             placeholder={placeholder} 
-            onChange={change}/>                
-        <BotonBuscar  funcion={change}/>                          
-        </div>
+            onChange={change}/>     
+        <BotonBuscar  funcion={change}/>      
+        </Stack>                     
+        {/* </div> */}
+        
         </div>
     );
 }

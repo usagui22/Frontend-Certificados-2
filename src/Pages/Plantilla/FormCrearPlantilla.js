@@ -1,32 +1,18 @@
 import { Form, Formik } from "formik";
-import React, { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
+import React from "react";
+import { Button, 
+    FormGroup, 
+    FormLabel
+} from "react-bootstrap";
 import FieldContent from "../../Components/FieldContent";
 import FieldSelect from "../../Components/FieldSelect";
 import * as Yup from'yup';
 import { API } from "../../Services/Conexion";
+import swal from "sweetalert";
+import { Input } from "reactstrap";
 
-const FormCrearPlantilla=()=>{
-    const [formularioEnviado,setFormularioEnviado]=useState(false);
-    const [plantillaSeleccionada,setSeleccionado]=useState([])
-    const tipo=[
-        {value:"aprobacion",label:"Aprobacion"}, 
-        {value:"participante",label:"Participación"}, 
-        {value:"expositor",label:"Expositor"}
-    ];
-    const cargarPlantillaId= async()=>{
-        try {
-            let res=await API.get("unidad/get-unidad");
-            setSeleccionado(res.data);
-        } catch (error) {
-            console.log("No se encuentra la unidad seleccionada")
-        }
-    }
+const FormCrearPlantilla=()=>{             
     
-    useEffect(()=>{
-        cargarPlantillaId();
-    },[])
-
     return(
         <>
         <div>
@@ -46,38 +32,76 @@ const FormCrearPlantilla=()=>{
                 descripcion:Yup.string()
                 .required("El campo no puede quedar vacio")
                 .matches(/^\w[a-zA-Z\s]+\.$/,'El campo contiene caracteres alfabeticos y debe terminar con .'),
-                plantilla:Yup.mixed()
-                .required("El campo no puede quedar vacio, seleccione un archivo")
+                // plantilla:Yup.mixed()
+                // .required("El campo no puede quedar vacio, seleccione un archivo")
             })
         }
-        onSubmit={(values)=>{
-            console.log("Submiting");
-            setFormularioEnviado(true);
+        onSubmit={(values, actions)=>{
+            try {            
+            const ruta="plantilla/crear-plantilla"
+            let data= new FormData();
+            data.append('nombre',values.nombre);
+            data.append('descripcion',values.descripcion);
+            data.append('plantilla',values.plantilla);                   
+            console.log("Los datos son:"+ data);
+            API.post(ruta,data)            
+            .then(                                        
+                swal({
+                    tittle:"Plantilla Creada",
+                    text:"La plantilla ha sido creada exitosamente",
+                    icon:"success",
+                    buttons:["Cancelar","Aceptar"]
+                })
+                    
+            )
+                actions.resetForm();
+            } catch (error) {
+                swal({
+                    tittle:"Error al Crear Elemento",
+                    text:"Error al crear elemento, revise la informacion ingresada",
+                    icon:"Warning",
+                    buttons:"Aceptar"
+                })
+            }                                
         }}
         >
-            <Form>
-                <FieldSelect
-                    label="Seleccione Tipo de Plantilla"                    
-                    opciones={tipo}    
-                    name="nombre"  
-                    type="select"              
-                />
+            {(formProps)=>(
+            <Form>                
+                <FieldSelect                    
+                    name="nombre"                    
+                    label={"Seleccionar Tipo Certificado"}
+                >
+                    <option value={""}>Seleccione... </option>
+                    <option value={"Aprobación"}>Aprobación</option>
+                    <option value={"Participación"}>Participación</option>
+                    <option value={"Expositor"}>Expositor</option>
+                
+                </FieldSelect>
                 <FieldContent
                     label="Descripcion"
                     type="text"
                     name="descripcion"               
                 />
-                <FieldContent
-                    label="Seleccionar Archivo"
+                {/* <FieldContent
+                    label={"Seleccionar Archivo"}
                     type="file"
                     name="plantilla"
+                    onChange={(e)=>formProps.setFieldValue('plantilla',e.target.files[0])}
+                /> */}
+                <FormGroup>
+                    <FormLabel>Seleccionar Archivo: </FormLabel>
+                <Input                   
+                    type="file"
+                    name="plantilla"
+                    onChange={(e)=>formProps.setFieldValue('plantilla',e.target.files[0])}
                 />
+                </FormGroup>                
                 <Button 
                 className="btn-crear"
                 type="submit"
-                >Aceptar</Button>
-                {formularioEnviado && <p>Formulario Enviado Exitosamente!</p>}
-            </Form>
+                >Crear</Button>               
+
+            </Form>)}
         </Formik>
         </>
     );

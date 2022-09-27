@@ -21,15 +21,16 @@ const BotonEditar =(props)=>{
 }
 
 const BotonEliminar =(props)=>{
-  const {direccionEliminar}=props;
+  const { funcion}=props;
+  
   return (
     <div>
-      <Button>
-        <Link className="text-light text" to={direccionEliminar}>
+      <Button className="me-auto" onClick={funcion}>
+        {/* <Link className="text-light text" to={direccionEliminar}> */}
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x-lg" viewBox="0 0 16 16">
             <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
           </svg>
-        </Link>
+        {/* /</Link> */}
       </Button> 
     </div>
   );
@@ -83,8 +84,8 @@ const BotonRetornar=(props)=>{
 const BotonCrear=(props)=>{
   const {direccionFormulario, etiqueta}=props;
   return(
-    <div className="btn-crear">
-      <Button >
+    <div >
+      <Button className="btn mx-2">
         <Link to={direccionFormulario} className="text text-white">
           {etiqueta}
         </Link>
@@ -96,8 +97,8 @@ const BotonCargar=(props)=>{
   const {direccionFormularioArchivo, etiqueta}=props;
   return(
     <div>
-      <Button className="btn-crear">
-        <Link to={direccionFormularioArchivo} className="text text-white">{etiqueta}</Link>
+      <Button className="mx-2">
+        <Link to={direccionFormularioArchivo} className="text text-white ">{etiqueta}</Link>
       </Button>            
     </div>
   );
@@ -107,14 +108,14 @@ const BotonAceptar=(props)=>{
   const {elementoAceptado}=props;
   return (
     <div>
-      <Button className="btn-crear" onClick={elementoAceptado}>        
+      <Button className="mx-2" onClick={elementoAceptado}>        
 
       </Button>
     </div>
   );
 }
 const BotonGoogle=(props)=>{
-  const {}=props;
+  //const {direccionGoogle}=props;
   return(
     <div>
       <Button >

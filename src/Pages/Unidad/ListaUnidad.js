@@ -7,7 +7,7 @@ import { BotonAsignar, BotonEditar, BotonEliminar, BotonCrear } from '../../Comp
 const ListaUnidad = () =>{
   const [unidad,setUnidad]=useState([]);  
 
-  const cargarUnidades = async ()=>{
+  const getUnidades = async ()=>{
     let path="unidad/ver-unidades";
       try {
         const res= await API.get(path)
@@ -16,9 +16,20 @@ const ListaUnidad = () =>{
         console.log("No se encuentran unidades registradas")
       }
   }
+  const handleDelete=(id)=>{
+    const p="unidad/eliminar-unidad";
+    try {
+      API.delete(p+"$id_uni"+id)
+    .then(
+      getUnidades()
+    );  
+    } catch (error) {
+      console.log("Error al eliminar elemento");
+    }    
+  }
 
   useEffect(()=>{    
-    cargarUnidades()
+    getUnidades()
 
   },[]);
 
@@ -27,7 +38,9 @@ const ListaUnidad = () =>{
       <div className='titulo'>
         <h3>LISTA DE UNIDADES REGISTRADAS</h3>      
       </div>
-      <BotonCrear direccionFormulario={"/CrearUnidad"} etiqueta="Crear Unidad"/>
+      <div className='p-3'>
+        <BotonCrear direccionFormulario={"/CrearUnidad"} etiqueta="Crear Unidad"/>
+      </div>      
 
       <div className='table-responsive'>
       <Table responsive  className='table table-bordered'>
@@ -62,7 +75,7 @@ const ListaUnidad = () =>{
                                 
               </td>              
               <td>
-                <BotonEliminar direccionEliminar={"/eliminarUnidad"+uni.id}/>
+                <BotonEliminar funcion={()=>handleDelete(uni.id)}/>
                 
               </td> 
               <td>

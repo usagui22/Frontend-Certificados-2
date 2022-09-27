@@ -1,12 +1,12 @@
 import { Formik, Form} from "formik";
-import React, { useState } from "react";
+import React from "react";
 import { Button } from "react-bootstrap";
 import FieldContent from "../../Components/FieldContent";
 import * as Yup from 'yup';
 import { API } from "../../Services/Conexion";
+import swal from "sweetalert";
 
-const FormCrearEvento =()=>{   
-    const [enviado,setMostrarEnviado]=useState(false);        
+const FormCrearEvento =()=>{     
 
     return(
         <>
@@ -45,25 +45,28 @@ const FormCrearEvento =()=>{
                     fecha_fin: Yup.date("ingrese una fecha valida").required("EL campo no puede quedar vacio"),
                 })                
             }
-            onSubmit={(values,{resetForm}) => {                                
+            onSubmit={(values,actions) => {                                
                 console.log(values)                
                 const ruta="evento/crear-evento"
                 try {                                        
                     API.post(ruta,values).then(
-                    console.log("El formulario ha sido enviado"))                                        
-                    resetForm();                    
-                    //setMostrarCrear(true);
-                    //mostrarMensaje("valido");
-                    setMostrarEnviado(true)                
+                    console.log("El formulario ha sido enviado"))                                                               
+                    swal({tittle: "Evento Creado",
+                        text:"El Evento se creo con exito",
+                        icon:"success",
+                        buttons:["Cancelar", "Aceptar"],
+                    });
+                    actions.resetForm(); 
+                                   
                 } catch (error) {
                     console.log("No se puede enviar la informacion")
-                    //setMostrarCrear(false);
-                    //mostrarMensaje("No Valido");
-                    
-                    console.log("error al mostrar modal");
+                    swal({tittle:"Error Crear Evento",
+                        text:"Error al crear evento revise el contenido por favor",
+                        icon:"warning",
+                        buttons:"Aceptar"
+                    });                                        
                 }
-              }}
-        >               
+              }}>               
             <Form className="formulario">
                 <FieldContent
                 label="Nombre"
@@ -112,7 +115,7 @@ const FormCrearEvento =()=>{
                 />
                 <Button              
                 className="btn-crear " type="submit">Aceptar</Button>
-                {enviado && <p className="is-valid">EL FORMULARIO SE HA ENVIADO CON EXITO</p>}           
+                
             </Form>
         </Formik>
         

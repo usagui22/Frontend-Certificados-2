@@ -25,9 +25,23 @@ const FormEditarDocumento=()=>{
             <h3>Editar Documento {documentoSeleccionado.id_documento}</h3>
         </div>
         <Formik
+        initialValues={{
+            participante:documentoSeleccionado.participante, 
+            hash:documentoSeleccionado.hash,
+            confimacion:documentoSeleccionado.confimacion,
+            path:documentoSeleccionado.path
+        }}
+        validationSchema={
+            Yup.object({
+                participante: Yup.string()
+                .required("El campo no puede quedar vacio")
+                .matches(/^\w+[a-zA-ZÀ-ÿ\s]+$/,"El campo solo contiene caracteres alfabeticos"),
+                //buscar valoraciones de los elementos dentro de documentos
+            })
+        }
         >
             <Form>
-                
+
             </Form>
         </Formik>
         </>

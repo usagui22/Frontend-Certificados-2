@@ -7,7 +7,7 @@ import { API } from "../../Services/Conexion";
 export const ListaEvento=()=>{
   const [evento,setEvento]=useState([]);
 
-  const cargarEventos =async ()=>{
+  const getEventos =async ()=>{
     let path="evento/listar-eventos";
     try {
       const res =await API.get(path)
@@ -16,9 +16,19 @@ export const ListaEvento=()=>{
       console.log("La lista no esa cargando")
     }
   }
-
+  const handleDelete=(id)=>{
+    const p="evento/eliminar-evento";
+    try {
+      API.delete(p+"$id_usu"+id)
+    .then(
+      getEventos()
+    );
+    } catch (error) {
+      console.log("Error al eliminar elemento");
+    }
+  }
   useEffect(()=>{    
-    cargarEventos();
+    getEventos();
   },[])
 
     return(
@@ -28,8 +38,9 @@ export const ListaEvento=()=>{
       <div className='titulo'>
         <h3>LISTA DE EVENTOS REGISTRADOS</h3>      
       </div>
-      
+      <div className="p-3">
         <BotonCrear direccionFormulario="/CrearEvento" etiqueta="Crear Evento"/>
+      </div>        
 
       <div className='table-responsive'>
       <Table responsive  className='table table-bordered'>
@@ -66,7 +77,10 @@ export const ListaEvento=()=>{
                 <BotonEditar direccionEditar="/EditarEvento" props={eve.id_evento}/>
               </td>
               <td>
-                <BotonEliminar direccionEliminar="/EliminarEvento"/>
+                <BotonEliminar 
+                direccionEliminar="/EliminarEvento"
+                funcion={()=>handleDelete(eve.id)}
+                />
               </td>              
             </tr>)
           })}

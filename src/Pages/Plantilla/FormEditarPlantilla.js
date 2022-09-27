@@ -8,30 +8,39 @@ import { API } from "../../Services/Conexion";
 
 const FormEditarPlantilla=()=>{
     const [mostrarEnviado,setMostrar]=useState(false);
-    const [seleccionado,setSeleccionado]=useState([]);
+    //const [datosSeleccionado,setDatosSeleccionado]=useState([]);
+    const [id,setId]=useState(0);
+    const [nombre,setNombre]=useState("");
+    const [descripcion,setDescripcion]=useState("");
+    const [plantilla,setPlantilla]=useState("");
 
-    const cargarPlantilla =async()=>{
-        let ruta="plantilla/get-plantilla";
-        try {
-            let res =await API.get(ruta);
-            setSeleccionado(res.data)
-        } catch (error) {
-            console.log("La plantilla seleccionada no esta en la base de datos")
-        }
-    }
+    // const cargarPlantilla =async()=>{
+    //     let ruta="plantilla/get-plantilla";
+    //     try {
+    //         let res =await API.get(ruta);
+    //         setSeleccionado(res.data)
+    //     } catch (error) {
+    //         console.log("La plantilla seleccionada no esta en la base de datos")
+    //     }
+    // }
     useEffect(()=>{
-        cargarPlantilla();
+        //cargarPlantilla();
+        setId(localStorage.getItem("id"));
+        setNombre(localStorage.getItem("nombre"));
+        setDescripcion(localStorage.getItem("descripcion"));
+        setPlantilla(localStorage.getItem("plantilla"));
+        
     },[])
     return(
         <>
         <div>
-            <h3>Editar Plantilla {seleccionado.id_plantilla}</h3>
+            <h3>Editar Plantilla {id}</h3>
         </div>
         <Formik
             initialValues={{
-                nombre:seleccionado.nombre,
-                descripcion:seleccionado.descripcion,
-                plantilla:seleccionado.plantilla
+                nombre:nombre,
+                descripcion:descripcion,
+                plantilla:plantilla
             }}
             validationSchema={
                 Yup.object({

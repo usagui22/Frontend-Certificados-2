@@ -1,12 +1,13 @@
 import { Formik, Form } from "formik";
-import React, { useState } from "react";
+import React from "react";
 import FieldContent from "../../Components/FieldContent";
 import * as Yup from'yup';
 import { Button } from "react-bootstrap";
+import { API } from "../../Services/Conexion";
+import swal from "sweetalert";
 
-
-const FormCrearUnidad=()=>{
-    const [formularioEnviado,setEnviado]=useState(false);
+const FormCrearUnidad=()=>{    
+    
     return(
         <>
         <div>
@@ -46,10 +47,28 @@ const FormCrearUnidad=()=>{
                     .matches(/^[A-Za-z0-9]+[+a-zA-Z0-9\s,]+\.?[A-Za-z\s.,]+$/,"El campo solo permite caracteres alfanumericos y simbolos ./:"),
                 })
             }
-            onSubmit={(values)=>{
-                console.log("El formulario es el siguiente")
-                console.log(values)
-                setEnviado(true);
+            onSubmit={(values, actions)=>{                
+                console.log(values);                
+                let rut="unidad/crear-unidad";
+                try {
+                    API.post(rut,values)
+                    .then(
+                        swal({
+                            tittle:"Crear Unidad",
+                            text:"El formulario de Unidad ha sido enviado con exito",
+                            icon:"success",
+                            buttons:["Cancelar","Aceptar"]
+                        })
+                    )
+                    actions.resetForm();
+                } catch (error) {
+                    swal({
+                        tittle:"Error Crear Unidad",
+                        text:"Error al crear formulario revise su informacion, por favor",
+                        icon:"warning",
+                        buttons:"Aceptar"
+                    })
+                }
             }}            
         >
             <Form className="formulario">
@@ -93,7 +112,7 @@ const FormCrearUnidad=()=>{
                 type="submit">
                     Crear
                 </Button>             
-                {formularioEnviado && <p className="is-valid">Formulario enviado con exito</p>}
+               
             </Form>
         </Formik>
         </>

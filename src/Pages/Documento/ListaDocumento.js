@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Button, ButtonGroup, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { BotonEditar, BotonEliminar } from "../../componentes/Botones";
+import { BotonEditar } from "../../Components/Botones";
 import { API } from "../../Services/Conexion";
 
 export const ListaDocumento =()=>{
 const [certificado,setCertificado]=useState([]);
 
-  const cargarCertificados= async ()=>{
+  const getCertificados= async ()=>{
     let path="documento/listar-documento";
     try {
       const res = await API.get(path);
@@ -17,35 +17,35 @@ const [certificado,setCertificado]=useState([]);
     }
   }
   useEffect(()=>{
-    cargarCertificados();
+    getCertificados();
   },[])
-    return(
-        <>
-        {/* <Lista titulos={etiquetas}/> */}
+  const EliminarDocumento=async(id)=>{
+    let path="documento/eliminar-documento";
+    try {
+      API.delete(path+id)
+      // .then(
+      //   getDocumentos();
+      // )
+    } catch (error) {
+      console.log("error al eliminar elemento")
+    }
+  }
+    return(   
         <>
       <div className='titulo'>
         <h3>LISTA DE CERTIFICADOS REGISTRADOS</h3>      
       </div>
       <div className='btn-crear'>
-        <ButtonGroup>
-          <Button className='btn col-me-2 m-1'>
-            <Link to={"/FormDocumento"} className="text-light text">Crear Certificado
+        <ButtonGroup className="p-1"> 
+          <Button >
+            <Link to={"/CrearDocumento"} className="text-light text">Crear Certificado
             </Link>
           </Button>  
 
-          <Button className='btn col-ms-2 m-1'>
-            <Link to={"/VerCertificado"} className="text-light text">Ver Certificado
-            </Link>
-          </Button>
-
-          <Button className='btn col-ms-2 m-1'>
+          <Button className='mx-2'>
             <Link to={"/ArchivoNotas"} className="text-light text">Subir Notas
             </Link>
           </Button>
-          {/* <Button className='btn col-ms-2 m-1'>
-            <Link to={"/DocumentoCertificado"} className="text-light text">Certificado Prueba
-            </Link>
-          </Button>                 */}
         </ButtonGroup>
       </div>
 
@@ -59,7 +59,7 @@ const [certificado,setCertificado]=useState([]);
             <th>Fecha Confirmacion</th>
             <th>Nota</th>
             <th>Path</th>
-            {/* <th>Opciones</th> */}
+            
           </tr>
         </thead>
         <tbody>
@@ -75,7 +75,7 @@ const [certificado,setCertificado]=useState([]);
                 <BotonEditar direccionEditar={"/editarDocumento"} />
               </td>
               <td>
-                <BotonEliminar direccionEliminar={"/eliminarDocumento"}/>
+                <Button onClick={()=>{EliminarDocumento(cer.id)}}/>
               </td>              
             </tr>)
           })}
@@ -84,10 +84,5 @@ const [certificado,setCertificado]=useState([]);
       </div>
       </>
 
-        </>
     );
 }
-const ListaDocumentoAprobados=()=>{
-
-}
-export {ListaDocumento, ListaDocumentoAprobados};

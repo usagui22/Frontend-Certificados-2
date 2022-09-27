@@ -13,11 +13,14 @@ import FormCrearUsuario from './Pages/Usuario/FormCrearUsuario';
 import IngresarUsuario from './Pages/Usuario/IngresarUsuario';
 import { ListaPlantilla } from './Pages/Plantilla/ListaPlantilla';
 import FormCrearPlantilla from './Pages/Plantilla/FormCrearPlantilla';
+
 import FormEditarEvento from './Pages/Evento/FormEditarEvento';
 import FormEditarUnidad from './Pages/Unidad/FormEditarUnidad';
 import FormEditarUsuario from './Pages/Usuario/FormEditarUsuario';
 import FormEditarPlantilla from './Pages/Plantilla/FormEditarPlantilla';
 import { ListaUsuarioUnidad } from './Pages/Unidad/ListaUsuarioUnidad';
+import { ListaDocumento } from './Pages/Documento/ListaDocumento';
+import FormCrearDocumento from './Pages/Documento/FormCrearDocumento';
 
 function App() {
   return (
@@ -46,6 +49,8 @@ function App() {
               <Route path='/Plantilla' element={<ListaPlantilla/>}/>
               <Route path='/CrearPlantilla' element={<FormCrearPlantilla/>}/>
               <Route path='/EditarPlantilla' element={<FormEditarPlantilla/>}/>
+              <Route path='/Documento' element={<ListaDocumento/>}/>
+              <Route path='/CrearDocumento' element={<FormCrearDocumento/>}/>
             </Routes>                
           </div>
         </div>

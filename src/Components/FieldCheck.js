@@ -1,19 +1,23 @@
 import React from "react";
-import { FormControl, FormGroup, FormLabel } from "react-bootstrap";
+import {FormCheck, FormGroup } from "react-bootstrap";
 
-const FieldCheck =()=>{
+const FieldCheck =(props)=>{
+    const {id_sel, funcion, cambio}=props;
     return(
-        <>
+        <Form>
+
         <FormGroup>
-        <FormLabel htmlFor="name">{content}</FormLabel>
-        <FormControl
+        {/* <FormLabel htmlFor="name">{content}</FormLabel> */}
+        <FormCheck
+            className="form-check-input"
             type="radio"
-            id={id_sel}
-            name={id_sel}
-            
+            id={id_sel}            
+            checked={funcion}
+            onChange={cambio}
         />
         </FormGroup>
-        </>
+
+        </Form>
     );
 }
 export default {FieldCheck};

@@ -3,6 +3,8 @@ import React from "react";
 import { Button } from "react-bootstrap";
 import * as Yup from 'yup';
 import FieldContent from "../../Components/FieldContent";
+import { API } from "../../Services/Conexion";
+import swal from "sweetalert";
 
 const FormCrearUsuario=()=>{
     return(
@@ -45,11 +47,31 @@ const FormCrearUsuario=()=>{
                     cargo: Yup.string().required("EL campo no puede quedar vacio")
                     .matches(),
                     cod_sis:Yup.string()
-                    .matches(/^[0-9A-Z]{7}$/,"El campo contiene 9 numeros")
+                    .matches(/^[0-9A-Z]{9}$/,"El campo contiene 9 numeros")
                 })
             }
-            onSubmit={(values)=>{
-                console.log("El formulario se ha enviado");
+            onSubmit={(values, actions)=>{
+                console.log(values);
+                const ruta="usuario/registrar-usuario";
+                try {
+                    API.post(ruta,values).then(
+                        swal({
+                            tittle:"Usuario Creado",
+                            text:"El usuario ha sido creado con exito",
+                            icon:"success",
+                            buttons:["Cancelar","Aceptar"]
+                        })
+                    )
+                    console.log("Enviado")
+                    actions.resetForm();
+                } catch (error) {
+                    swal({
+                        tittle:"Error al Crear Usuario",
+                        text:"Error al crear usuario revise su informacion",
+                        icon:"warning",
+                        buttons:"Aceptar"
+                    })
+                }
             }}
         >
             <Form className="formulario">
