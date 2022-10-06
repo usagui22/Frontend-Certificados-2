@@ -1,35 +1,34 @@
 import { Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import FieldContent from "../../Components/FieldContent";
-//import FieldSelect from "../../Components/FieldSelect";
 import * as Yup from 'yup';
 import { API } from "../../Services/Conexion";
-//import SelectSearch from "react-select-search";
-import { Button, FormGroup, FormLabel, FormSelect } from "react-bootstrap";
+import { Button, FormGroup } from "react-bootstrap";
+import FieldSelect from "../../Components/FieldSelect";
+import swal from "sweetalert";
 
 const FormCrearDocumento=()=>{
     //lista de Usuarios
-    const [listaParticipante,setListaParticipante]=useState([]);
-    //seleccionar Opcion Usuario
-    const [select,setSelect]=useState();
-    //seleccionar Opcion Plantilla
-    const [plantilla,setPlantilla]=useState();
-    //seleccionar opcion Evento
-    const [eventoSeleccionado,setEventoSeleccionado]=useState();
+    const [listaParticipante,setListaParticipante]=useState([]);    
     //lista de eventos
-    const [listaEvento,setListaEvento]=useState([]);
+    const [listaEvento,setListaEvento]=useState([]);   
+    //lista plantillas
+    const [listaPlantillas,setListaPlantillas]=useState([]);
         
     const cargarData=async()=>{
         const part="documento/listar-participante";
         const even="documento/listar-evento";
+        const plan="plantilla/listar-plantillas";
 
         const resPar= await API.get(part);
         const resEve=await API.get(even);
+        const resPlan=await API.get(plan);
 
                 setListaParticipante(resPar.data);
-                setListaEvento(resEve.data)
+                setListaEvento(resEve.data);
+                setListaPlantillas(resPlan.data);
         
-    }
+    }    
 
 useEffect(()=>{
     cargarData();    
@@ -42,73 +41,112 @@ useEffect(()=>{
         </div>
         <Formik
             initialValues={{
-                participante:'',
+                nombre_integrante:'',
                 plantilla:'',
+                ponderacion:'',
                 nota:'',
             }}
             validationSchema={
                 Yup.object({
-                    participante:Yup.string()
-                    .required("El campo no puede quedar en vacio")
-                    .matches(/^\w+[a-zA-ZÀ-ÿ\s]+$/,"El campo solo contiene caracteres alfabeticos"),                    
-                    plantilla:Yup.string(),
-                    nota:Yup.number(),
+                    nombre_integrante:Yup.string()
+                    .required("El campo no puede quedar en vacio"),                    
+                    evento:Yup.string()
+                    .required("El campo no puede quedar vacio"),                                  
+                    ponderacion:Yup.number(),                    
+                    nota_certificado:Yup.number()
+                    .required("El campo no puede quedar en vacio"),
+                    plantilla:Yup.string()
+                    .required("No puede dejar el campo vacio"),                    
                 })
             }
             onSubmit={(values)=>{
-                
+                const ruta="documento/crear-documento-admin";
+                try {                   
+                    console.log(values);
+                    API.post(ruta,values)
+                    .then(
+                        swal({
+                            title:"Nuevo Certificado Creado",
+                            text:"El certificado ha sido creado vealo en lista",
+                            icon:"success",
+                            buttons:["Cancelar","Aceptar"]
+                        })                        
+                    )                    
+                } catch (error) {
+                    swal({
+                        title:"Error al Crear Elemento",
+                        text:"Error al crear elemento, revise la informacion ingresada",
+                        icon:"Warning",
+                        buttons:"Aceptar"
+                    })
+                }                                
             }}
         >
-            <Form>
-                {/* crear certificado desde administracion */}
+            <Form>                
             <FormGroup>
-                <FormLabel>Seleccione Participante: </FormLabel>
+                
                 <div>
-                <FormSelect                    
-                                
-                    value={select}                    
-                    onChange={e=>setSelect(e.target.value)}              
-                    name="participante"                                    
+                <FieldSelect                                                                                   
+                    name="nombre_integrante"                 
+                    label={"Seleccione Participante"}                   
                 >
-                {listaParticipante.map((par)=>(
-                    <option key={par.id}>{par.nombres} {par.apellido_paterno} {par.apellido_materno}</option>))
-                    }
-                </FormSelect>
+                {listaParticipante.map((par,i)=> {
+                    return (
+                    <option key={i} value={par.id}>{par.nombres} {par.apellido_paterno} {par.apellido_materno}</option>)
+                    })
+                     } 
+                </FieldSelect>
                 </div>
             </FormGroup>
-            <FormGroup>
-                <FormLabel>Seleccione Plantilla: </FormLabel>
-                <FormSelect
-                    value={plantilla}
-                    onChange={e=>setPlantilla(e.target.value)}
+            <FormGroup>            
+                <FieldSelect                    
+                    name="evento"                    
+                    label="Seleccione Evento"
+                >
+                {listaEvento.map((even,k)=>{
+                    return(
+                    // <option value=''>Seleccione integrante...</option>
+                    <option key={k} value={even.id}>{even.nombre}</option>)
+                })}
+                </FieldSelect>
+            </FormGroup>       
+
+            <div className="container">
+            <div className=" row row-cols-auto">
+                <FieldContent 
+                    className="col w-25"
+                    label={"Nota Ponderada"}
+                    type="number"
+                    name="ponderacion"
+                />
+                <FieldContent
+                    className="col w-25"
+                    label={"Nota Certificado"}
+                    type="number"
+                    name="nota_certificado"
+                />
+                </div>
+            </div>        
+
+            <FormGroup>                
+                <FieldSelect                    
                     name="plantilla"
-                    placeholder="Seleccionar..."
+                    label={"Seleccione Plantilla"}                    
                 >
                 {
-
+                    listaPlantillas.map((pla,j)=>{
+                        return(
+                        <option key={j} value={pla.id}>{pla.nombre}</option>)
+                    })
                 }
-                </FormSelect>
-            </FormGroup>
-
-            <FormGroup>
-                <FormLabel>Seleccione Evento: </FormLabel>
-                <FormSelect
-                    value={eventoSeleccionado}
-                    onChange={e=>setEventoSeleccionado(e.target.value)}
-                    name="evento"                    
-                >
-                {listaEvento.map((lista)=>(
-                    <option key={lista.id_evento}>{lista.nombre}</option>
-                ))}
-                </FormSelect>
+                </FieldSelect>
             </FormGroup>        
-            <FieldContent
-                label={"Nota: "}
-                type="number"
-                name="nota"
-            />
-            <Button type="Submit">Aceptar</Button>
-            
+            <br/>
+            {/* <Button type="submit" >Aceptar</Button> */}
+            <Button 
+                className="btn-crear"
+                type="submit"
+                >Crear</Button>
             </Form>
         </Formik>
         </>

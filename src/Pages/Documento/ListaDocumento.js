@@ -76,7 +76,14 @@ const [certificado,setCertificado]=useState([]);
               </td>
               <td>
                 <Button onClick={()=>{EliminarDocumento(cer.id)}}/>
-              </td>              
+              </td>            
+              <td>
+                <Link to={"/VerCertificado"}>
+                  <Button >
+                    Ver
+                  </Button>
+                </Link>                
+              </td>  
             </tr>)
           })}
         </tbody>

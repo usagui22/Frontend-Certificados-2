@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ButtonGroup, Table } from "react-bootstrap";
+import swal from "sweetalert";
 import { BotonCargar, BotonCrear,BotonEditar, BotonEliminar } from "../../Components/Botones";
 import { API } from "../../Services/Conexion";
 
@@ -19,12 +20,26 @@ export const ListaUsuario = () => {
   const handleDelete=(id)=>{
     const p="usuario/eliminar-usuario";
     try {
-      API.delete(p+"$id_usu"+id)
+      API.post(p,id)
+      //API.delete(p+"$id_usu"+id)
+      
     .then(
-      getUsuarios()
+      getUsuarios(),
+      swal({
+        title:"Eliminar Usuario Exitosamente",
+        text:"EL elemento se ha eliminado exitosamente",
+        icon:"success",
+        buttons:["Cancelar","Aceptar"]
+      })
     );
     } catch (error) {
       console.log("Error al eliminar elemento");
+      swal({
+        title:"Eliminar Usuario",
+        text:"No se ha podido eliminar Usuario",
+        icon:"danger",
+        buttons:"ok"
+      })
     }    
   }
 

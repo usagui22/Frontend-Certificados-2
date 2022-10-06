@@ -1,12 +1,59 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Badge, ListGroup } from "react-bootstrap";
 import Card from 'react-bootstrap/Card';
 import CardGroup from 'react-bootstrap/CardGroup';
 import {Chart as ChartJs,Tooltip, Title,ArcElement,Legend} from 'chart.js';
 import { Pie } from "react-chartjs-2";
+import { API } from "../Services/Conexion";
 ChartJs.register(Tooltip,Title,ArcElement,Legend);
 
 const Home = () =>{
+const [usuarios,setUsuarios]=useState({
+    responsable:' ',
+    participante:' ',
+    expositor:' ',
+    coordinador:''
+});
+const [plantillas,setPlantillas]=useState({
+    aprobacion:'',
+    participacion:'',
+    exposicion:''
+});
+
+    const cargarDatos=async(e)=>{
+        const usup="usuario/get-usuario-participante";
+        const usur="usuario/get-usuario-responsable";
+        const usuc="usuario/get-usuario-coordinador";
+        const usue="usuario/get-usuario-expositor";
+        //const documentos="documento/get-documentos-data";
+        const planA="plantilla/plantillas-aprobacion";
+        const planPA="plantilla/plantillas-participacion";
+        const planEX="plantilla/plantillas-expositor";
+        //count usuarios
+        const resP= await API.get(usup);
+        const resR=await API.get(usur);
+        const resC=await API.get(usuc);
+        const resE=await API.get(usue);
+        //count plantillas
+        const resA=await API.get(planA);
+        const resPA=await API.get(planPA);
+        const resEX=await API.get(planEX);
+
+        setUsuarios({
+            //...usuarios,
+            responsable:resR.data,
+            participante:resP.data,
+            expositor:resE.data,
+            coordinador:resC.data    
+        })                
+        setPlantillas({
+            //...plantillas,
+            aprobacion:resA.data,
+            participacion:resPA.data,
+            exposicion:resEX.data
+        })        
+    }
+
     const dataEvento=
     {
         labels:["FINALIZADOS","EN CURSO"],
@@ -19,7 +66,7 @@ const Home = () =>{
     {
         labels:["APROBADOS","PARTICIPANTE","EXPOSITOR"],
         datasets:[{
-            data:[50,64,14],
+            data:[plantillas.aprobacion,plantillas.participacion,plantillas.exposicion],
             backgroundColor:['purple','blue','green']
         }]
     };
@@ -27,15 +74,14 @@ const Home = () =>{
     {
         labels:["ESTUDIANTE","DOCENTE","RESPONSABLE DE UNIDAD","COORDINADOR DE UNIDAD"],
         datasets:[{
-            data:[110,18,9,5],
+            data:[usuarios.participante,usuarios.expositor,usuarios.responsable,usuarios.coordinador],
             backgroundColor:['purple','blue','green','red']
         }]
     };
-    //configuracion del grafico
-    // const opciones={
-    //     responsive:true,
-    // }
-
+    
+    useEffect(()=>{
+        cargarDatos();
+    },[]);
     return(
         <>
             <h3>Bienvenido Administrador</h3>
@@ -47,7 +93,6 @@ const Home = () =>{
             <Pie data={dataEvento} />
         </div>
         </Card.Header>        
-        {/* <Card.Img variant="top" src="holder.js/100px160" /> */}
         <Card.Body>
           <Card.Title>EVENTOS</Card.Title>          
             <div className="listaEvento">
@@ -78,18 +123,14 @@ const Home = () =>{
             </div>
             
             </Card.Body>
-            {/* <Card.Footer> */}
-          {/* <small className="text-muted">Last updated 3 mins ago</small> */}
-        {/* </Card.Footer> */}
+            
       </Card>
       <Card>
         <Card.Header>
         <div>
         <Pie data={dataCertificado} />
         </div>            
-        </Card.Header>
-        
-        {/* <Card.Img variant="top" src="holder.js/100px160" /> */}
+        </Card.Header>               
         <Card.Body>
           <Card.Title>CERTIFICADOS</Card.Title>
           
@@ -103,7 +144,7 @@ const Home = () =>{
             <div className="fw-bold">APROBADOS</div>            
             </div>
                 <Badge bg="primary" pill>
-                50
+                {plantillas.aprobacion}
                 </Badge>
             </ListGroup.Item>
             <ListGroup.Item
@@ -114,7 +155,7 @@ const Home = () =>{
             <div className="fw-bold">PARTICIPANTE</div>                
             </div>
                 <Badge bg="primary" pill>
-                64
+                {plantillas.participacion}
                 </Badge>
             </ListGroup.Item>            
             <ListGroup.Item
@@ -125,24 +166,20 @@ const Home = () =>{
             <div className="fw-bold">EXPOSITOR</div>                
             </div>
                 <Badge bg="primary" pill>
-                14
+                {plantillas.exposicion}
                 </Badge>
             </ListGroup.Item>            
             </ListGroup>
             </div>
           
         </Card.Body>
-        {/* <Card.Footer> */}
-          {/* <small className="text-muted">Last updated 3 mins ago</small> */}
-        {/* </Card.Footer> */}
-      </Card>
+       </Card>
       <Card>
         <Card.Header>
         <div>
             <Pie data={dataUsuario} />
         </div>
-        </Card.Header>                
-        {/* <Card.Img variant="top" src="holder.js/100px160" /> */}
+        </Card.Header>                        
         <Card.Body>
           <Card.Title>USUARIOS</Card.Title>
           <div>
@@ -156,7 +193,7 @@ const Home = () =>{
             <div className="fw-bold">ESTUDIANTE</div>            
             </div>
                 <Badge bg="primary" pill>
-                110
+                {usuarios.participante}
                 </Badge>
             </ListGroup.Item>
             <ListGroup.Item
@@ -167,7 +204,7 @@ const Home = () =>{
             <div className="fw-bold">DOCENTE</div>                
             </div>
                 <Badge bg="primary" pill>
-                18
+                {usuarios.expositor}
                 </Badge>
             </ListGroup.Item>            
             <ListGroup.Item
@@ -178,7 +215,7 @@ const Home = () =>{
             <div className="fw-bold">RESPONSABLES DE UNIDAD</div>                
             </div>
                 <Badge bg="primary" pill>
-                9
+                {usuarios.responsable}
                 </Badge>
             </ListGroup.Item>            
             <ListGroup.Item
@@ -189,16 +226,14 @@ const Home = () =>{
             <div className="fw-bold">COORDINADORES DE UNIDAD</div>                
             </div>
                 <Badge bg="primary" pill>
-                5
+                {usuarios.coordinador}
                 </Badge>
             </ListGroup.Item>            
             </ListGroup>
             </div>
           </div>
         </Card.Body>
-        {/* <Card.Footer> */}
-          {/* <small className="text-muted">Last updated 3 mins ago</small> */}
-        {/* </Card.Footer> */}
+        
       </Card>
     </CardGroup>
   

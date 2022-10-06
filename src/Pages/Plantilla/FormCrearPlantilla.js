@@ -47,7 +47,7 @@ const FormCrearPlantilla=()=>{
             API.post(ruta,data)            
             .then(                                        
                 swal({
-                    tittle:"Plantilla Creada",
+                    title:"Plantilla Creada",
                     text:"La plantilla ha sido creada exitosamente",
                     icon:"success",
                     buttons:["Cancelar","Aceptar"]
@@ -57,7 +57,7 @@ const FormCrearPlantilla=()=>{
                 actions.resetForm();
             } catch (error) {
                 swal({
-                    tittle:"Error al Crear Elemento",
+                    title:"Error al Crear Elemento",
                     text:"Error al crear elemento, revise la informacion ingresada",
                     icon:"Warning",
                     buttons:"Aceptar"
@@ -81,13 +81,7 @@ const FormCrearPlantilla=()=>{
                     label="Descripcion"
                     type="text"
                     name="descripcion"               
-                />
-                {/* <FieldContent
-                    label={"Seleccionar Archivo"}
-                    type="file"
-                    name="plantilla"
-                    onChange={(e)=>formProps.setFieldValue('plantilla',e.target.files[0])}
-                /> */}
+                />                
                 <FormGroup>
                     <FormLabel>Seleccionar Archivo: </FormLabel>
                 <Input                   

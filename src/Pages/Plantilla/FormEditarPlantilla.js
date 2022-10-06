@@ -1,6 +1,7 @@
 import { Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
+//import { useNavigate } from "react-router-dom";
 import * as Yup from 'yup';
 import FieldContent from "../../Components/FieldContent";
 import FieldSelect from "../../Components/FieldSelect";
@@ -8,29 +9,24 @@ import { API } from "../../Services/Conexion";
 
 const FormEditarPlantilla=()=>{
     const [mostrarEnviado,setMostrar]=useState(false);
-    //const [datosSeleccionado,setDatosSeleccionado]=useState([]);
+    
+    //valores iniciales con el dato de la base
     const [id,setId]=useState(0);
     const [nombre,setNombre]=useState("");
     const [descripcion,setDescripcion]=useState("");
-    const [plantilla,setPlantilla]=useState("");
+    const [plantilla,setPlantilla]=useState(null);
 
-    // const cargarPlantilla =async()=>{
-    //     let ruta="plantilla/get-plantilla";
-    //     try {
-    //         let res =await API.get(ruta);
-    //         setSeleccionado(res.data)
-    //     } catch (error) {
-    //         console.log("La plantilla seleccionada no esta en la base de datos")
-    //     }
-    // }
+    //const navigate = useNavigate();
+    
     useEffect(()=>{
-        //cargarPlantilla();
+        
         setId(localStorage.getItem("id"));
         setNombre(localStorage.getItem("nombre"));
         setDescripcion(localStorage.getItem("descripcion"));
         setPlantilla(localStorage.getItem("plantilla"));
         
     },[])
+
     return(
         <>
         <div>
@@ -38,9 +34,9 @@ const FormEditarPlantilla=()=>{
         </div>
         <Formik
             initialValues={{
-                nombre:nombre,
-                descripcion:descripcion,
-                plantilla:plantilla
+                nombre:'',
+                descripcion:'',
+                plantilla:''
             }}
             validationSchema={
                 Yup.object({
@@ -72,7 +68,7 @@ const FormEditarPlantilla=()=>{
             <Form>
                 <FieldSelect
                     label="Seleccione Tipo de Plantilla"                    
-//                    opciones={tipo}    
+                    //opciones={tipo}    
                     name="nombre"  
                     type="select"              
                 />

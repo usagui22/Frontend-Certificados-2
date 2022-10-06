@@ -21,6 +21,8 @@ import FormEditarPlantilla from './Pages/Plantilla/FormEditarPlantilla';
 import { ListaUsuarioUnidad } from './Pages/Unidad/ListaUsuarioUnidad';
 import { ListaDocumento } from './Pages/Documento/ListaDocumento';
 import FormCrearDocumento from './Pages/Documento/FormCrearDocumento';
+import FormFileNotes from './Pages/Documento/FormFileNotes';
+import Certificado from './Pages/Documento/Certificado';
 
 function App() {
   return (
@@ -51,6 +53,8 @@ function App() {
               <Route path='/EditarPlantilla' element={<FormEditarPlantilla/>}/>
               <Route path='/Documento' element={<ListaDocumento/>}/>
               <Route path='/CrearDocumento' element={<FormCrearDocumento/>}/>
+              <Route path='/VerCetificado' element={<Certificado/>}/>
+              <Route path='/ArchivoNotas' element={<FormFileNotes/>}/>
             </Routes>                
           </div>
         </div>

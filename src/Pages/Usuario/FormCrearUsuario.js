@@ -51,10 +51,12 @@ const FormCrearUsuario=()=>{
                 })
             }
             onSubmit={(values, actions)=>{
-                console.log(values);
-                const ruta="usuario/registrar-usuario";
+                //console.log(values);                
                 try {
-                    API.post(ruta,values).then(
+                    const ruta="usuario/registrar-usuario";
+                    const data={values};
+                    API.post(ruta,data)
+                    .then(
                         swal({
                             tittle:"Usuario Creado",
                             text:"El usuario ha sido creado con exito",
@@ -62,8 +64,8 @@ const FormCrearUsuario=()=>{
                             buttons:["Cancelar","Aceptar"]
                         })
                     )
-                    console.log("Enviado")
-                    actions.resetForm();
+                    // console.log("Enviado")
+                    // actions.resetForm();
                 } catch (error) {
                     swal({
                         tittle:"Error al Crear Usuario",
