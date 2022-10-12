@@ -53,7 +53,7 @@ function App() {
               <Route path='/EditarPlantilla' element={<FormEditarPlantilla/>}/>
               <Route path='/Documento' element={<ListaDocumento/>}/>
               <Route path='/CrearDocumento' element={<FormCrearDocumento/>}/>
-              <Route path='/VerCertificado' element={<Certificado/>}/>
+              <Route path='/VerDocumento' element={<Certificado/>}/>
               <Route path='/ArchivoNotas' element={<FormFileNotes/>}/>
             </Routes>                
           </div>

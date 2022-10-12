@@ -48,8 +48,7 @@ export const ListaUsuario = () => {
   }, [])
 
   return(
-        <>
-        {/* <Lista titulos={etiquetas}/> */}
+        <>      
         <>
       <div className='titulo'>
         <h3>LISTA DE USUARIOS</h3>      
@@ -60,6 +59,7 @@ export const ListaUsuario = () => {
         <BotonCargar direccionFormularioArchivo="/CargarArchivo" etiqueta="Seleccionar Archivo"/>
         </ButtonGroup>
       </div>    
+      
       <div className='table-responsive'>
       <Table responsive  className='table table-bordered'>
         <thead>

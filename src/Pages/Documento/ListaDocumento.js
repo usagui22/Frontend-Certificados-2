@@ -1,33 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { Button, ButtonGroup, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { BotonEditar } from "../../Components/Botones";
+import { BotonEditar, BotonEliminar, BotonVer } from "../../Components/Botones";
 import { API } from "../../Services/Conexion";
 
 export const ListaDocumento =()=>{
 const [certificado,setCertificado]=useState([]);
 
-  const getCertificados= async ()=>{
+  const cargarCertificados= async ()=>{    
     let path="documento/listar-documento";
-    try {
-      const res = await API.get(path);
-      setCertificado(res.data);
+    try {      
+      const resC = await API.get(path)
+        setCertificado(resC.data)      
     } catch (error) {      
       console.log("No tiene datos la solicitud pedida o error en solicitud")
     }
   }
+  
   useEffect(()=>{
-    getCertificados();
+    cargarCertificados()
   },[])
-  const EliminarDocumento=async(id)=>{
-    let path="documento/eliminar-documento";
-    try {
-      API.delete(path+id)
-      // .then(
-      //   getDocumentos();
-      // )
-    } catch (error) {
-      console.log("error al eliminar elemento")
+
+  const handleDelete=(id)=>{    
+    try{
+      const r="documento/eliminar-documento"
+      API.delete(r+"?$id_usu"+id)
+      .then(
+        cargarCertificados()
+        )
+    }catch(error){
+      console.log("Error al eliminar elemento");
     }
   }
     return(   
@@ -55,34 +57,35 @@ const [certificado,setCertificado]=useState([]);
           <tr>
             <th>#</th>
             <th>Nombre</th>
-            <th>Hash</th>
+            <th>Evento</th>
             <th>Fecha Confirmacion</th>
             <th>Nota</th>
-            <th>Path</th>
-            
+            <th>Plantilla</th>            
           </tr>
         </thead>
         <tbody>
           {certificado.map((cer)=>{
-            return(<tr key={cer.id}>
-              <td>{cer.id}</td>
-              <td>{cer.nombre}</td>
-              <td>{cer.hash}</td>
+            return(
+            <tr key={cer.id_documento}>
+              <td>{cer.id_documento}</td>
+              <td>{cer.nombre_integrante}</td>
+              <td>{cer.id_evento}</td>
               <td>{cer.fecha_confirmacion}</td>              
               <td>{cer.nota_valoracion}</td>
-              <td>{cer.path}</td>
+              <td>{cer.id_plantilla}</td>
               <td>
                 <BotonEditar direccionEditar={"/editarDocumento"} />
               </td>
               <td>
-                <Button onClick={()=>{EliminarDocumento(cer.id)}}/>
+                <BotonEliminar
+                  direccionEliminar="/ElimininarEvento"
+                  funcion={()=>handleDelete(cer.id)}
+                />                
               </td>            
-              <td>
-                <Link to={"/VerCertificado"}>
-                  <Button >
-                    Ver
-                  </Button>
-                </Link>                
+              <td>    
+                <BotonVer
+                  direccionVer={"/VerDocumento"}
+                />                              
               </td>  
             </tr>)
           })}
