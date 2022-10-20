@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ButtonGroup, Image } from "react-bootstrap";
+import { Image } from "react-bootstrap";
 import { API } from "../../Services/Conexion";
 import logoUmss from "../../Assets/Images/logoUMSS.png";
 import QR from "../../Components/QrAValidar";
@@ -23,8 +23,9 @@ const Certificado=(props)=>{
         setDocumento(dataD);
     }
     const obtenerFecha = () =>{
-        //cuando el estudiante ha confirmado
+        //cuando el estudiante ha confirmado                
         //cuando el estudiante no ha confirmado
+        
     }
 
     useEffect(()=>{
@@ -41,8 +42,7 @@ const Certificado=(props)=>{
                     backgroundRepeat:'no-repeat',
                     heigth:"550px",
                     width:"950px",
-                }}
-                
+                }}                
             >
                 <br/>
                 <div>
@@ -75,12 +75,7 @@ const Certificado=(props)=>{
                     fecha_validar={obtenerFecha}
                     />
                 </div>                
-            </div>
-            <div>
-                <ButtonGroup>
-                    
-                </ButtonGroup>
-            </div>
+            </div>            
         </div>
         </>
     );

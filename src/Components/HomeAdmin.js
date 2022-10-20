@@ -19,6 +19,10 @@ const [plantillas,setPlantillas]=useState({
     participacion:'',
     exposicion:''
 });
+const [eventos,setEvento]=useState({
+    finalizados:'',
+    enCurso:''
+})
 
     const cargarDatos=async(e)=>{
         const usup="usuario/get-usuario-participante";
@@ -29,6 +33,8 @@ const [plantillas,setPlantillas]=useState({
         const planA="plantilla/plantillas-aprobacion";
         const planPA="plantilla/plantillas-participacion";
         const planEX="plantilla/plantillas-expositor";
+        const eveF="evento/eventos-finalizados";
+        const eveEC="evento/eventos-en-curso";
         //count usuarios
         const resP= await API.get(usup);
         const resR=await API.get(usur);
@@ -38,7 +44,9 @@ const [plantillas,setPlantillas]=useState({
         const resA=await API.get(planA);
         const resPA=await API.get(planPA);
         const resEX=await API.get(planEX);
-
+        //count eventos
+        const resF= await API.get(eveF);
+        const resEC=await API.get(eveEC);
         setUsuarios({
             //...usuarios,
             responsable:resR.data,
@@ -52,13 +60,17 @@ const [plantillas,setPlantillas]=useState({
             participacion:resPA.data,
             exposicion:resEX.data
         })        
+        setEvento({
+            finalizados:resF.data,
+            enCurso:resEC.data
+        })
     }
 
     const dataEvento=
     {
         labels:["FINALIZADOS","EN CURSO"],
         datasets:[{
-            data:[8,10],
+            data:[eventos.finalizados,eventos.enCurso],
             backgroundColor:['blue','green']
         }],
     };
@@ -105,7 +117,7 @@ const [plantillas,setPlantillas]=useState({
             <div className="fw-bold">FINALIZADOS</div>            
             </div>
                 <Badge bg="primary" pill>
-                8
+                {eventos.finalizados}
                 </Badge>
             </ListGroup.Item>
             <ListGroup.Item
@@ -116,7 +128,7 @@ const [plantillas,setPlantillas]=useState({
             <div className="fw-bold">EN CURSO</div>                
             </div>
                 <Badge bg="primary" pill>
-                10
+                {eventos.enCurso}
                 </Badge>
             </ListGroup.Item>            
             </ListGroup>
