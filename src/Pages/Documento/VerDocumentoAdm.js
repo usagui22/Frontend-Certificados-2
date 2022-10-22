@@ -22,10 +22,12 @@ const Certificado=(props)=>{
         const dataD=await API.post(rdoc,id_doc);
         setDocumento(dataD);
     }
-    const obtenerFecha = () =>{
+    const obtenerFechaHash = () =>{
         //cuando el estudiante ha confirmado                
-        //cuando el estudiante no ha confirmado
-        
+        //o cuando el estudiante no ha confirmado
+        let rfc="documento/get-fecha-hash";      
+        const datahash=API.get(rfc);
+        return datahash.hash;
     }
 
     useEffect(()=>{
@@ -72,7 +74,7 @@ const Certificado=(props)=>{
             <div className="container certificado-pie">
                 <div className="col-sm-4">
                     <QR
-                    fecha_validar={obtenerFecha}
+                    fecha_validar={obtenerFechaHash}
                     />
                 </div>                
             </div>            
