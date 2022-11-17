@@ -23,6 +23,8 @@ import { ListaDocumento } from './Pages/Documento/ListaDocumento';
 import FormCrearDocumento from './Pages/Documento/FormCrearDocumento';
 import FormFileNotes from './Pages/Documento/FormFileNotes';
 import Certificado from './Pages/Documento/VerDocumentoAdm';
+import { BorradorCertificado } from './Pages/Documento/VerBorradorCertificado';
+
 
 function App() {
   return (
@@ -55,6 +57,8 @@ function App() {
               <Route path='/CrearDocumento' element={<FormCrearDocumento/>}/>
               <Route path='/VerDocumento' element={<Certificado/>}/>
               <Route path='/ArchivoNotas' element={<FormFileNotes/>}/>
+              <Route path='/VerBorrador' element={<BorradorCertificado/>}/>
+              
             </Routes>                
           </div>
         </div>

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Image } from "react-bootstrap";
+import { Button, Image } from "react-bootstrap";
 import { API } from "../../Services/Conexion";
 import logoUmss from "../../Assets/Images/logoUMSS.png";
 import QR from "../../Components/QrAValidar";
+import { Link } from "react-router-dom";
 
 const Certificado=(props)=>{
     const{id_pla,id_eve,id_doc,nombre_integrante}=props;
@@ -78,6 +79,11 @@ const Certificado=(props)=>{
                     />
                 </div>                
             </div>            
+        </div>
+        <div>
+            <Link to={"VerBorrador"}>
+            <Button>Ver Borrador</Button>
+            </Link>            
         </div>
         </>
     );
